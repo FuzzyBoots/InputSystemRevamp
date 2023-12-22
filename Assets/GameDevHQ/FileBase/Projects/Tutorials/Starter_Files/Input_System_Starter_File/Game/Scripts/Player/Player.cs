@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Scripts.LiveObjects;
 using Cinemachine;
+using System;
 
 namespace Game.Scripts.Player
 {
@@ -33,7 +34,7 @@ namespace Game.Scripts.Player
             Forklift.onDriveModeExited += ReturnPlayerControl;
             Forklift.onDriveModeEntered += HidePlayer;
             Drone.OnEnterFlightMode += ReleasePlayerControl;
-            Drone.onExitFlightmode += ReturnPlayerControl;
+            Drone.OnExitFlightmode += ReturnPlayerControl;
         } 
 
         private void Start()
@@ -131,9 +132,19 @@ namespace Game.Scripts.Player
             Forklift.onDriveModeExited -= ReturnPlayerControl;
             Forklift.onDriveModeEntered -= HidePlayer;
             Drone.OnEnterFlightMode -= ReleasePlayerControl;
-            Drone.onExitFlightmode -= ReturnPlayerControl;
+            Drone.OnExitFlightmode -= ReturnPlayerControl;
         }
 
+        internal void DisableWalkMode()
+        {
+            _playerInputs.Player.Disable();
+
+        }
+
+        internal void ActivateWalkMode()
+        {
+            _playerInputs.Player.Enable();
+        }
     }
 }
 

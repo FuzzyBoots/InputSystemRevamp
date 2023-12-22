@@ -17231,7 +17231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972744894}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22150002, y: 0.04733111, z: -0.010764234, w: 0.9739516}
+  m_LocalRotation: {x: 0.22150013, y: 0.0473212, z: -0.01076198, w: 0.97395205}
   m_LocalPosition: {x: -0.48177326, y: 4.5286655, z: -4.833789}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19022,6 +19022,7 @@ MonoBehaviour:
   _propAnim: {fileID: 181193216}
   _droneCam: {fileID: 106664337}
   _interactableZone: {fileID: 1810029383}
+  _player: {fileID: 359860633}
 --- !u!65 &1073608671
 BoxCollider:
   m_ObjectHideFlags: 0
