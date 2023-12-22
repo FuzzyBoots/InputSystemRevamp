@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using UnityEngine.InputSystem;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -23,36 +24,42 @@ namespace Game.Scripts.LiveObjects
         public static event Action onHackComplete;
         public static event Action onHackEnded;
 
+        private PlayerInputs _playerInput;
+
         private void OnEnable()
         {
+            _playerInput = new PlayerInputs();
+            _playerInput.Player.Enable();
+            _playerInput.Player.Interact.performed += Interact_performed;
+            _playerInput.Player.Escape.performed += Escape_performed;
             InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
             InteractableZone.onHoldEnded += InteractableZone_onHoldEnded;
         }
 
-        private void Update()
+        private void Escape_performed(InputAction.CallbackContext obj)
         {
             if (_hacked == true)
             {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    var previous = _activeCamera;
-                    _activeCamera++;
+                _hacked = false;
+                onHackEnded?.Invoke();
+                ResetCameras();
+            }
+        }
+
+        private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (_hacked == true)
+            {
+                var previous = _activeCamera;
+                _activeCamera++;
 
 
-                    if (_activeCamera >= _cameras.Length)
-                        _activeCamera = 0;
+                if (_activeCamera >= _cameras.Length)
+                    _activeCamera = 0;
 
 
-                    _cameras[_activeCamera].Priority = 11;
-                    _cameras[previous].Priority = 9;
-                }
-
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    _hacked = false;
-                    onHackEnded?.Invoke();
-                    ResetCameras();
-                }
+                _cameras[_activeCamera].Priority = 11;
+                _cameras[previous].Priority = 9;
             }
         }
 

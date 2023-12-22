@@ -50,6 +50,13 @@ namespace Game.Scripts.LiveObjects
             EscapeFlightMode();
         }
 
+        public void EscapeFlightMode()
+        {
+            _inFlightMode = false;
+            OnExitFlightmode?.Invoke();
+            ExitFlightMode();
+        }
+
         private void EnterFlightMode(InteractableZone zone)
         {
             if (_inFlightMode != true && zone.GetZoneID() == 4) // drone Scene
@@ -83,13 +90,6 @@ namespace Game.Scripts.LiveObjects
                 CalculateTilt();
                 CalculateMovementUpdate();
             }
-        }
-
-        public void EscapeFlightMode()
-        {
-            _inFlightMode = false;
-            OnExitFlightmode?.Invoke();
-            ExitFlightMode();
         }
 
         private void FixedUpdate()
