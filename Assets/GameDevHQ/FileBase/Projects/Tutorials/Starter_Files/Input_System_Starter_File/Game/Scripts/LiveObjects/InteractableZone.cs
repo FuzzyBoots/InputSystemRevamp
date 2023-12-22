@@ -93,7 +93,6 @@ namespace Game.Scripts.LiveObjects
         {
             if (_inZone == true)
             {
-                Debug.Log($"Pressed key - PressHold state is {_keyState}");
                 if (_keyState != KeyState.PressHold)
                 {
                     //press

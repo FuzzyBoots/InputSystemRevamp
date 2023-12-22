@@ -47,7 +47,7 @@ namespace Game.Scripts.LiveObjects
 
         private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            ExitFlightMode();
+            EscapeFlightMode();
         }
 
         private void EnterFlightMode(InteractableZone zone)
@@ -66,7 +66,9 @@ namespace Game.Scripts.LiveObjects
         }
 
         private void ExitFlightMode()
-        {            
+        {
+            Debug.Log("Exiting");
+
             _droneCam.Priority = 9;
             _inFlightMode = false;
             UIManager.Instance.DroneView(false);
@@ -110,22 +112,17 @@ namespace Game.Scripts.LiveObjects
 
         private void CalculateMovementFixedUpdate()
         {
-            Debug.Log($"Calculate Movement - Pressed: {_playerInput.Drone.Move.IsPressed()} Value: {_playerInput.Drone.Move.ReadValue<Vector3>()}");
             Vector3 movement = _playerInput.Drone.Move.ReadValue<Vector3>();
-            if (movement.magnitude > 0f)
+            if (Math.Abs(movement.y) > 0f)
             {
-                _rigidbody.AddForce(movement.z * transform.up * _speed, ForceMode.Acceleration);
+                _rigidbody.AddForce(movement.y * transform.up * _speed, ForceMode.Acceleration);
             }
         }
 
         private void CalculateTilt()
         {
-            Debug.Log($"Calculate Tilt - Pressed: {_playerInput.Drone.Move.IsPressed()} Value: {_playerInput.Drone.Move.ReadValue<Vector3>()}");
-            Vector3 movement = _playerInput.Drone.Move.ReadValue<Vector3>();
-            if (movement.magnitude > 0f)
-            {
-                transform.rotation = Quaternion.Euler(30 * movement.x, transform.localRotation.eulerAngles.y, 30 * movement.y);
-            }
+            Vector3 movement = _playerInput.Drone.Move.ReadValue<Vector3>().normalized;
+            transform.rotation = Quaternion.Euler(30 * movement.z, transform.localRotation.eulerAngles.y, -30 * movement.x);
         }
 
         private void OnDisable()
