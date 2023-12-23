@@ -13,54 +13,83 @@ namespace Game.Scripts.LiveObjects
         [SerializeField] private InteractableZone _interactableZone;
         private bool _isReadyToBreak = false;
 
-        private List<Rigidbody> _brakeOff = new List<Rigidbody>();
+        private List<Rigidbody> _breakingPieces = new List<Rigidbody>();
+        private float _holdStarted = 0;
+        [SerializeField] private float _holdDelay = 0.5f;
 
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += InteractableZone_onZoneInteractionComplete;
+            InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
+            InteractableZone.onHoldEnded += InteractableZone_onHoldEnded;
+        }
+
+        private void InteractableZone_onHoldStarted(int obj)
+        {
+            if (_isReadyToBreak)
+            {
+                Debug.Log("Hold started");
+
+                _holdStarted = Time.time;
+            }
+        }
+
+        private void InteractableZone_onHoldEnded(int obj)
+        {
+            if (_isReadyToBreak)
+            {
+                Debug.Log("Hold ended");
+                if (_holdStarted <= Time.time + _holdDelay)
+                {
+                    int parts = Random.Range(3, 6);
+                    for (int i = 0; i < parts; i++)
+                    {
+                        BreakPart();
+                    }
+                }
+                else
+                {
+                    // Otherwise, single strike
+                    BreakPart();
+                }
+            }
         }
 
         private void InteractableZone_onZoneInteractionComplete(InteractableZone zone)
         {
-            
-            if (_isReadyToBreak == false && _brakeOff.Count >0)
+            Debug.Log($"{_isReadyToBreak} - {_breakingPieces.Count} - {zone.GetZoneID()}");
+
+            if (_isReadyToBreak == false && _breakingPieces.Count > 0 && zone.GetZoneID() == 6)
             {
+                Debug.Log("Interaction Zone complete", this);
                 _wholeCrate.SetActive(false);
                 _brokenCrate.SetActive(true);
                 _isReadyToBreak = true;
-            }
-
-            if (_isReadyToBreak && zone.GetZoneID() == 6) //Crate zone            
-            {
-                if (_brakeOff.Count > 0)
-                {
-                    BreakPart();
-                    StartCoroutine(PunchDelay());
-                }
-                else if(_brakeOff.Count == 0)
-                {
-                    _isReadyToBreak = false;
-                    _crateCollider.enabled = false;
-                    _interactableZone.CompleteTask(6);
-                    Debug.Log("Completely Busted");
-                }
-            }
+            }            
         }
 
         private void Start()
         {
-            _brakeOff.AddRange(_pieces);
-            
+            _breakingPieces.AddRange(_pieces);            
         }
 
 
 
         public void BreakPart()
         {
-            int rng = Random.Range(0, _brakeOff.Count);
-            _brakeOff[rng].constraints = RigidbodyConstraints.None;
-            _brakeOff[rng].AddForce(new Vector3(1f, 1f, 1f), ForceMode.Force);
-            _brakeOff.Remove(_brakeOff[rng]);            
+            if (_breakingPieces.Count > 0)
+            {
+                int rng = Random.Range(0, _breakingPieces.Count);
+                _breakingPieces[rng].constraints = RigidbodyConstraints.None;
+                _breakingPieces[rng].AddForce(new Vector3(1f, 1f, 1f), ForceMode.Force);
+                _breakingPieces.Remove(_breakingPieces[rng]);
+            } else
+            {
+                _isReadyToBreak = false;
+                _crateCollider.enabled = false;
+                _interactableZone.CompleteTask(6);
+                Debug.Log("Completely Busted");
+            }
         }
 
         IEnumerator PunchDelay()
