@@ -25,7 +25,7 @@ namespace Game.Scripts.LiveObjects
         private InteractableZone _interactableZone;
 
         [SerializeField]
-        private Game.Scripts.Player.Player _player;
+        private Player.Player _player;
 
         private PlayerInputs _playerInput;
         
@@ -74,8 +74,6 @@ namespace Game.Scripts.LiveObjects
 
         private void ExitFlightMode()
         {
-            Debug.Log("Exiting");
-
             _droneCam.Priority = 9;
             _inFlightMode = false;
             UIManager.Instance.DroneView(false);
