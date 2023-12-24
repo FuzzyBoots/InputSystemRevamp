@@ -34,8 +34,6 @@ namespace Game.Scripts.LiveObjects
 
             if (_isReadyToBreak)
             {
-                Debug.Log("Hold started");
-
                 _holdStarted = Time.time;
             }
         }
@@ -44,11 +42,10 @@ namespace Game.Scripts.LiveObjects
         {
             if (_isReadyToBreak)
             {
-                Debug.Log("Hold ended");
                 if (Time.time > _holdStarted + _holdDelay)
                 {
+                    // Break multiple
                     int parts = Random.Range(3, 6);
-                    Debug.Log($"Broke {parts}");
                     for (int i = 0; i < parts; i++)
                     {
                         BreakPart();
@@ -56,7 +53,6 @@ namespace Game.Scripts.LiveObjects
                 }
                 else
                 {
-                    Debug.Log("Broke 1");
                     // Otherwise, single strike
                     BreakPart();
                 }
