@@ -13,7 +13,8 @@ namespace Game.Scripts.LiveObjects
         {
             Collectable,
             Action,
-            HoldAction
+            HoldAction,
+            OptionalHold
         }
 
         private enum KeyState
@@ -38,8 +39,6 @@ namespace Game.Scripts.LiveObjects
         private bool _actionPerformed = false;
         [SerializeField]
         private Sprite _inventoryIcon;
-        [SerializeField]
-        private KeyCode _zoneKeyInput;
         [SerializeField]
         private KeyState _keyState;
         [SerializeField]
@@ -81,6 +80,7 @@ namespace Game.Scripts.LiveObjects
         {
             if (_inZone == true)
             {
+                Debug.Log($"Interact Canceled - {_zoneType}");
                 if (_keyState == KeyState.PressHold)
                 {
                     _inHoldState = false;
@@ -114,6 +114,11 @@ namespace Game.Scripts.LiveObjects
                                 _actionPerformed = true;
                                 UIManager.Instance.DisplayInteractableZoneMessage(false);
                             }
+                            break;
+
+                        case ZoneType.OptionalHold:
+                            PerformAction();
+                            UIManager.Instance.DisplayInteractableZoneMessage(false);
                             break;
                     }
                 }
@@ -176,6 +181,17 @@ namespace Game.Scripts.LiveObjects
                         }
                         else
                             UIManager.Instance.DisplayInteractableZoneMessage(true, $"Hold the {_interactKeyName} key to perform action");
+                        break;
+
+                    case ZoneType.OptionalHold:
+                        _inZone = true;
+                        if (_displayMessage != null)
+                        {
+                            string message = $"Press the {_interactKeyName} key to {_displayMessage}. Hold for greater effect.";
+                            UIManager.Instance.DisplayInteractableZoneMessage(true, message);
+                        }
+                        else
+                            UIManager.Instance.DisplayInteractableZoneMessage(true, $"Hold the {_interactKeyName} key to perform action. Hold for greater effect.");
                         break;
                 }
             }
