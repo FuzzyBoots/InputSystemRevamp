@@ -19,13 +19,19 @@ namespace Game.Scripts.LiveObjects
 
         private void OnEnable()
         {
-            InteractableZone.onZoneInteractionComplete += InteractableZone_onZoneInteractionComplete;
             InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
             InteractableZone.onHoldEnded += InteractableZone_onHoldEnded;
         }
 
-        private void InteractableZone_onHoldStarted(int obj)
+        private void InteractableZone_onHoldStarted(int zone)
         {
+            if (_isReadyToBreak == false && _breakingPieces.Count > 0 && InteractableZone.CurrentZoneID == 6)
+            {
+                _wholeCrate.SetActive(false);
+                _brokenCrate.SetActive(true);
+                _isReadyToBreak = true;
+            }
+
             if (_isReadyToBreak)
             {
                 Debug.Log("Hold started");
@@ -34,14 +40,15 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void InteractableZone_onHoldEnded(int obj)
+        private void InteractableZone_onHoldEnded(int zone)
         {
             if (_isReadyToBreak)
             {
                 Debug.Log("Hold ended");
-                if (_holdStarted <= Time.time + _holdDelay)
+                if (Time.time > _holdStarted + _holdDelay)
                 {
                     int parts = Random.Range(3, 6);
+                    Debug.Log($"Broke {parts}");
                     for (int i = 0; i < parts; i++)
                     {
                         BreakPart();
@@ -49,23 +56,11 @@ namespace Game.Scripts.LiveObjects
                 }
                 else
                 {
+                    Debug.Log("Broke 1");
                     // Otherwise, single strike
                     BreakPart();
                 }
             }
-        }
-
-        private void InteractableZone_onZoneInteractionComplete(InteractableZone zone)
-        {
-            Debug.Log($"{_isReadyToBreak} - {_breakingPieces.Count} - {zone.GetZoneID()}");
-
-            if (_isReadyToBreak == false && _breakingPieces.Count > 0 && zone.GetZoneID() == 6)
-            {
-                Debug.Log("Interaction Zone complete", this);
-                _wholeCrate.SetActive(false);
-                _brokenCrate.SetActive(true);
-                _isReadyToBreak = true;
-            }            
         }
 
         private void Start()
@@ -106,7 +101,8 @@ namespace Game.Scripts.LiveObjects
 
         private void OnDisable()
         {
-            InteractableZone.onZoneInteractionComplete -= InteractableZone_onZoneInteractionComplete;
+            InteractableZone.onHoldStarted -= InteractableZone_onHoldStarted;
+            InteractableZone.onHoldEnded -= InteractableZone_onHoldEnded;
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Game.Scripts.LiveObjects
         {
             Collectable,
             Action,
-            HoldAction
+            HoldAction,
+            OptionalHold
         }
 
         private enum KeyState
@@ -81,6 +82,7 @@ namespace Game.Scripts.LiveObjects
         {
             if (_inZone == true)
             {
+                Debug.Log($"Interact Canceled - {_zoneType}");
                 if (_keyState == KeyState.PressHold)
                 {
                     _inHoldState = false;
@@ -95,6 +97,7 @@ namespace Game.Scripts.LiveObjects
             {
                 if (_keyState != KeyState.PressHold)
                 {
+                    Debug.Log($"Not Hold state - {_zoneType}");
                     //press
                     switch (_zoneType)
                     {
@@ -115,6 +118,11 @@ namespace Game.Scripts.LiveObjects
                                 UIManager.Instance.DisplayInteractableZoneMessage(false);
                             }
                             break;
+
+                        case ZoneType.OptionalHold:
+                            PerformAction();
+                            UIManager.Instance.DisplayInteractableZoneMessage(false);
+                            break;
                     }
                 }
 
@@ -122,6 +130,7 @@ namespace Game.Scripts.LiveObjects
                 {
                     _inHoldState = true;
 
+                    Debug.Log($"Hold state - {_zoneType}");
                     switch (_zoneType)
                     {
                         case ZoneType.HoldAction:
