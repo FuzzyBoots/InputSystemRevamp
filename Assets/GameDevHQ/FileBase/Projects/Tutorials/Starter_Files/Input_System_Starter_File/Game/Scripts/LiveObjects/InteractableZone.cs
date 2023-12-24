@@ -95,6 +95,7 @@ namespace Game.Scripts.LiveObjects
             {
                 if (_keyState != KeyState.PressHold)
                 {
+                    Debug.Log($"Not Hold state - {_zoneType}");
                     //press
                     switch (_zoneType)
                     {
@@ -127,6 +128,7 @@ namespace Game.Scripts.LiveObjects
                 {
                     _inHoldState = true;
 
+                    Debug.Log($"Hold state - {_zoneType}");
                     switch (_zoneType)
                     {
                         case ZoneType.HoldAction:
