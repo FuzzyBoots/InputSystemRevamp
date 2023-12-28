@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +24,13 @@ namespace Game.Scripts.UI
         #endregion
 
         [SerializeField]
-        private Text _interactableZone;
+        private TMP_Text _interactableZoneText;
+        [SerializeField]
+        private TMP_Text _laptopInstructionsText;
+        [SerializeField]
+        private TMP_Text _droneInstructionsText;
+        [SerializeField]
+        private TMP_Text _forkliftInstructionsText;
         [SerializeField]
         private Image _inventoryDisplay;
         [SerializeField]
@@ -35,8 +43,26 @@ namespace Game.Scripts.UI
 
         public void DisplayInteractableZoneMessage(bool showMessage, string message = null)
         {
-            _interactableZone.text = message;
-            _interactableZone.gameObject.SetActive(showMessage);
+            _interactableZoneText.text = message;
+            _interactableZoneText.enabled = showMessage;
+        }
+
+        public void DisplayLaptopInstructions(bool showMessage, string message = null)
+        {
+            _laptopInstructionsText.text = message;
+            _laptopInstructionsText.enabled = showMessage;
+        }
+
+        public void DisplayDroneInstructions(bool showMessage, string message = null)
+        {
+            _droneInstructionsText.text = message;
+            _droneInstructionsText.enabled = showMessage;
+        }
+
+        public void DisplayForkliftInstructions(bool showMessage, string message = null)
+        {
+            _forkliftInstructionsText.text = message;
+            _forkliftInstructionsText.enabled = showMessage;
         }
 
         public void UpdateInventoryDisplay(Sprite icon)

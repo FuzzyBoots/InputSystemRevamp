@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
 using UnityEngine.InputSystem;
+using TMPro;
+using Game.Scripts.UI;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -41,6 +43,7 @@ namespace Game.Scripts.LiveObjects
             if (_hacked == true)
             {
                 _hacked = false;
+                UIManager.Instance.DisplayLaptopInstructions(false);
                 onHackEnded?.Invoke();
                 ResetCameras();
             }
@@ -92,6 +95,7 @@ namespace Game.Scripts.LiveObjects
                 _progressBar.gameObject.SetActive(false);
                 _progressBar.value = 0;
                 onHackEnded?.Invoke();
+
             }
         }
 
@@ -110,6 +114,10 @@ namespace Game.Scripts.LiveObjects
 
             //hide progress bar
             _progressBar.gameObject.SetActive(false);
+
+            string interactKey = _playerInput.Player.Interact.bindings[0].ToDisplayString();
+            string escapeKey = _playerInput.Player.Escape.bindings[0].ToDisplayString(); 
+            UIManager.Instance.DisplayLaptopInstructions(false, $"Press {interactKey} to switch cameras. Press {escapeKey} to exit.");
 
             //enable Vcam1
             _cameras[0].Priority = 11;
