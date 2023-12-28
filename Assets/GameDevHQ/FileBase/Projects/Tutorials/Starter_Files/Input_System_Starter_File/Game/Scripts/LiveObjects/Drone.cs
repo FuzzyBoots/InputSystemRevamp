@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Cinemachine;
 using Game.Scripts.UI;
+using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -68,6 +70,20 @@ namespace Game.Scripts.LiveObjects
                 _inFlightMode = true;
                 OnEnterFlightMode?.Invoke();
                 UIManager.Instance.DroneView(true);
+                InputAction move = _playerInput.Drone.Move;
+                string upKey = move.bindings[1].ToDisplayString();
+                string downKey = move.bindings[2].ToDisplayString();
+                string bankLKey = move.bindings[3].ToDisplayString();
+                string bankRKey = move.bindings[4].ToDisplayString();
+                string bankFKey = move.bindings[5].ToDisplayString();
+                string bankBKey = move.bindings[6].ToDisplayString();
+                string rotLKey = _playerInput.Drone.Rotation.bindings[1].ToDisplayString();
+                string rotRKey = _playerInput.Drone.Rotation.bindings[2].ToDisplayString();
+                string escapeKey = _playerInput.Drone.Escape.bindings[0].ToDisplayString();
+
+                string instructions = $"Bank Left/Right - {bankLKey}/{bankRKey}\nTilt Forward/Back : {bankFKey}/{bankBKey}\n" + 
+                    $"Up/Down: {upKey}/{downKey}\nRotate Left/Right: {rotLKey}/{rotRKey}\nEscape: {escapeKey}";
+                UIManager.Instance.DisplayDroneInstructions(true, instructions);
                 _interactableZone.CompleteTask(4);
             }
         }

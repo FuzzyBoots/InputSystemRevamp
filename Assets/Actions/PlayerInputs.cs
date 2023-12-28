@@ -378,7 +378,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
+                    ""name"": ""1D Axis - Keyboard"",
                     ""id"": ""7edbb51b-5a85-45ff-a7b1-b48dacd167fe"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
