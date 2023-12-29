@@ -117,7 +117,7 @@ namespace Game.Scripts.LiveObjects
 
             string interactKey = _playerInput.Player.Interact.bindings[0].ToDisplayString();
             string escapeKey = _playerInput.Player.Escape.bindings[0].ToDisplayString(); 
-            UIManager.Instance.DisplayLaptopInstructions(false, $"Press {interactKey} to switch cameras. Press {escapeKey} to exit.");
+            UIManager.Instance.DisplayLaptopInstructions(true, $"Press {interactKey} to switch cameras. Press {escapeKey} to exit.");
 
             //enable Vcam1
             _cameras[0].Priority = 11;

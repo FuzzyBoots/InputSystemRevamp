@@ -168,7 +168,7 @@ namespace Game.Scripts.LiveObjects
                         _inZone = true;
                         if (_displayMessage != null)
                         {
-                            string message = $"Press the {_interactKeyName} key to {_displayMessage}.";
+                            string message = $"Hold the {_interactKeyName} key to {_displayMessage}.";
                             UIManager.Instance.DisplayInteractableZoneMessage(true, message);
                         }
                         else

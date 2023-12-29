@@ -81,7 +81,7 @@ namespace Game.Scripts.LiveObjects
                 string rotRKey = _playerInput.Drone.Rotation.bindings[2].ToDisplayString();
                 string escapeKey = _playerInput.Drone.Escape.bindings[0].ToDisplayString();
 
-                string instructions = $"Bank Left/Right - {bankLKey}/{bankRKey}\nTilt Forward/Back : {bankFKey}/{bankBKey}\n" + 
+                string instructions = $"Bank Left/Right: {bankLKey}/{bankRKey}\nTilt Forward/Back: {bankFKey}/{bankBKey}\n" + 
                     $"Up/Down: {upKey}/{downKey}\nRotate Left/Right: {rotLKey}/{rotRKey}\nEscape: {escapeKey}";
                 UIManager.Instance.DisplayDroneInstructions(true, instructions);
                 _interactableZone.CompleteTask(4);
@@ -92,6 +92,7 @@ namespace Game.Scripts.LiveObjects
         {
             _droneCam.Priority = 9;
             _inFlightMode = false;
+            UIManager.Instance.DisplayDroneInstructions(false);
             UIManager.Instance.DroneView(false);
             _playerInput.Drone.Disable();
             _player.ActivateWalkMode();

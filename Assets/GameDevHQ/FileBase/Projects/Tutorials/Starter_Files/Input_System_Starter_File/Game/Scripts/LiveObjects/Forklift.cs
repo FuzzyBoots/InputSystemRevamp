@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
+using Game.Scripts.UI;
+using System.Globalization;
+using Unity.VisualScripting;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -54,6 +57,18 @@ namespace Game.Scripts.LiveObjects
                 _playerInput.Forklift.Enable();
                 _inDriveMode = true;
                 _forkliftCam.Priority = 11;
+                InputAction drive = _playerInput.Forklift.Drive;
+                string upKey = drive.bindings[1].ToDisplayString();
+                string downKey = drive.bindings[2].ToDisplayString();
+                string leftKey = drive.bindings[3].ToDisplayString();
+                string rightKey = drive.bindings[4].ToDisplayString();
+                string forkUp = _playerInput.Forklift.Fork.bindings[1].ToDisplayString();
+                string forkDown = _playerInput.Forklift.Fork.bindings[2].ToDisplayString();
+                string escapeKey = _playerInput.Forklift.Escape.bindings[0].ToDisplayString();
+
+                string instructions = $"Turn Left/Right - {leftKey}/{rightKey}\tAccelerate / Decelerate : {upKey}/{downKey}\n" + 
+                    $"Fork Up / Down: {forkUp}/{forkDown}\tEscape: {escapeKey}";
+                UIManager.Instance.DisplayForkliftInstructions(true, instructions);
                 onDriveModeEntered?.Invoke();
                 _driverModel.SetActive(true);
                 _interactableZone.CompleteTask(5);
