@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Scripts.LiveObjects
@@ -11,6 +12,7 @@ namespace Game.Scripts.LiveObjects
         [SerializeField] private Rigidbody[] _pieces;
         [SerializeField] private BoxCollider _crateCollider;
         [SerializeField] private InteractableZone _interactableZone;
+        [SerializeField] private Animator _playerAnim;
         private bool _isReadyToBreak = false;
 
         private List<Rigidbody> _breakingPieces = new List<Rigidbody>();
@@ -21,6 +23,14 @@ namespace Game.Scripts.LiveObjects
         {
             InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
             InteractableZone.onHoldEnded += InteractableZone_onHoldEnded;
+        }
+
+        private void Start()
+        {
+            GameObject player = GameObject.Find("Model");
+            _playerAnim = player.GetComponent<Animator>();
+
+            _breakingPieces.AddRange(_pieces);
         }
 
         private void InteractableZone_onHoldStarted(int zone)
@@ -44,6 +54,7 @@ namespace Game.Scripts.LiveObjects
             {
                 if (Time.time > _holdStarted + _holdDelay)
                 {
+                    _playerAnim.SetTrigger("Punch Combo");
                     // Break multiple
                     int parts = Random.Range(3, 6);
                     for (int i = 0; i < parts; i++)
@@ -53,17 +64,12 @@ namespace Game.Scripts.LiveObjects
                 }
                 else
                 {
+                    _playerAnim.SetTrigger("Strike");
                     // Otherwise, single strike
                     BreakPart();
                 }
             }
         }
-
-        private void Start()
-        {
-            _breakingPieces.AddRange(_pieces);            
-        }
-
 
 
         public void BreakPart()
