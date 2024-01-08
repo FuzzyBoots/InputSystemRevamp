@@ -62,8 +62,8 @@ namespace Game.Scripts.LiveObjects
                 string downKey = drive.bindings[2].ToDisplayString();
                 string leftKey = drive.bindings[3].ToDisplayString();
                 string rightKey = drive.bindings[4].ToDisplayString();
-                string forkUp = _playerInput.Forklift.Fork.bindings[1].ToDisplayString();
-                string forkDown = _playerInput.Forklift.Fork.bindings[2].ToDisplayString();
+                string forkUp = _playerInput.Forklift.Fork.bindings[2].ToDisplayString();
+                string forkDown = _playerInput.Forklift.Fork.bindings[1].ToDisplayString();
                 string escapeKey = _playerInput.Forklift.Escape.bindings[0].ToDisplayString();
 
                 string instructions = $"Turn Left/Right - {leftKey}/{rightKey}\tAccelerate / Decelerate : {upKey}/{downKey}\n" + 
@@ -80,6 +80,7 @@ namespace Game.Scripts.LiveObjects
             _inDriveMode = false;
             _forkliftCam.Priority = 9;            
             _driverModel.SetActive(false);
+            UIManager.Instance.DisplayForkliftInstructions(false);
             onDriveModeExited?.Invoke();
             _playerInput.Forklift.Disable();
             _player.ActivateWalkMode();
